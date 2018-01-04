@@ -19,9 +19,9 @@ Rectangle {
     property int number: 2
 
     x: tiles.itemAt(xindex + root.rows*yindex).x
-    y: tiles.itemAt(xindex + root.columns*yindex).y
+    y: tiles.itemAt(xindex + root.rows*yindex).y
     width: tiles.itemAt(xindex + root.rows*yindex).width
-    height: tiles.itemAt(xindex + root.columns*yindex).height
+    height: tiles.itemAt(xindex + root.rows*yindex).height
     radius: 2
 
     Text {
@@ -84,6 +84,71 @@ Rectangle {
             }
         }
 
+        return shouldSpawn
+    }
+
+    function moveUp() {
+        var shouldSpawn = false
+
+        for (var j = yindex-1; j >= 0; --j){
+            var tile = root.getTileAt(xindex, j)
+
+            if (tile){
+                if (tile.number == number){
+                    scoreBoard.score += number*2
+
+                    number = number + number
+
+                    root.pop(xindex, j)
+
+                    move(xindex, j)
+
+                    shouldSpawn = true
+                }
+            }
+            else {
+                move(xindex, j)
+                shouldSpawn = true
+            }
+        }
+
+        return shouldSpawn
+    }
+
+    function moveDown() {
+        var shouldSpawn = false
+
+        for (var j = yindex+1; j < root.rows; ++j){
+            var tile = root.getTileAt(xindex, j)
+
+            console.log("j: " + j)
+            console.log("yind: " + yindex)
+            console.log("xind: " + xindex)
+            if (tile)
+                console.log("Tile")
+
+            if (tile){
+                if (tile.number == number){
+                    scoreBoard.score += number*2
+
+                    number = number + number
+
+                    root.pop(xindex, j)
+
+                    move(xindex, j)
+
+                    shouldSpawn = true
+                }
+            }
+            else {
+                move(xindex, j)
+                shouldSpawn = true
+            }
+        }
+
+        console.log("past")
+        console.log("yind: " + yindex)
+        console.log("xind: " + xindex)
         return shouldSpawn
     }
 }

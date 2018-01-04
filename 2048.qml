@@ -100,7 +100,41 @@ Rectangle {
     }
 
     function moveUp() {
+        var shouldSpawn = false
 
+        for (var i = 0; i < rows; ++i)
+            for (var j = 0; j < columns; ++j) {
+                var tile = root.getTileAt(j, i)
+
+                if (!tile)
+                    continue
+
+                if (tile.moveUp())
+                    shouldSpawn = true
+            }
+
+        if (shouldSpawn){
+            spawn()
+        }
+    }
+
+    function moveDown() {
+        var shouldSpawn = false
+
+        for (var i = rows-1; i >= 0; --i)
+            for (var j = 0; j < columns; ++j) {
+                var tile = root.getTileAt(j, i)
+
+                if (!tile)
+                    continue
+
+                if (tile.moveDown())
+                    shouldSpawn = true
+            }
+
+        if (shouldSpawn){
+            spawn()
+        }
     }
 
     Item {
@@ -112,6 +146,10 @@ Rectangle {
 
         Keys.onUpPressed: {
             root.moveUp()
+        }
+
+        Keys.onDownPressed: {
+            root.moveDown();
         }
     }
 

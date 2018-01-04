@@ -44,47 +44,98 @@ Rectangle {
                 height: parent.tileHeight
                 color: "#AAAAAA"
                 radius: 2
+
+                property int xindex: index % root.columns
+                property int yindex: index / root.columns
             }
 
             function getEmptyTile(){
                 var emptyTiles = []
-                for (var i = 0; i < root.columns; i++) {
-                    for (var j = 0; j < root.rows; j++) {
-                        if (!root.numbers[j + root.width*i]) {
-                            emptyTiles.push(itemAt(j + root.width*i))
+
+                for (var i = 0; i < root.columns; ++i) {
+                    for (var j = 0; j < root.rows; ++j) {
+                        if (!root.getTileAt(j, i)) {
+                            emptyTiles.push(itemAt(j + root.rows*i))
                         }
                     }
                 }
-                return emptyTiles[Math.floor(Math.random * emptyTiles.length)];
+
+                var index = Math.floor(Math.random() * emptyTiles.length)
+
+                return emptyTiles[index];
             }
         }
     }
 
-    Component {
-        Rectangle {
-            id: number
-            color: number <= 1 ? "transparent" :
-                                 number <= 2 ? "grey" :
-                                               number <= 4 ? "brown" :
-                                                             number <= 8 ? "blue" :
-                                                                           number <= 16 ? "yellow" :
-                                                                                          number <= 32 ? "green" :
-                                                                                                         number <= 64 ? "dark-green" :
-                                                                                                                        number <= 128 ? "white" :
-                                                                                                                                        number <= 256 ? "pink" :
-                                                                                                                                                        number <= 512 ? "red" :
-                                                                                                                                                                        number <= 1024 ? "purple" :
-                                                                                                                                                                                         number <= 2048 ? "dark-blue" : "#3c3a32"
+    function moveLeft() {
+        var shouldSpawn = false
 
-            property int xindex
-            property int yindex
-            property int number: 2
+        for (var i = 0; i < rows; ++i)
+            for (var j = 0; j < columns; ++j) {
+                var tile = root.getTileAt(j, i)
 
-            x: tiles.itemAt(xindex + root.width*yindex).x
-            y: tiles.itemAt(xindex + root.height*yindex).y
-            width: tiles.itemAt(xindex + root.width*yindex).width
-            height: tiles.itemAt(xindex + root.width*yindex).height
-            radius: 2
+                if (!tile)
+                    continue
+
+                if (tile.moveLeft())
+                    shouldSpawn = true
+            }
+
+        if (shouldSpawn){
+            spawn()
         }
     }
+
+    function moveUp() {
+
+    }
+
+    Item {
+        anchors.fill: parent
+        focus: true
+        Keys.onLeftPressed: {
+            root.moveLeft()
+        }
+
+        Keys.onUpPressed: {
+            root.moveUp()
+        }
+    }
+
+    function getTileAt(x, y) {
+            for (var i = 0; i < numbers.length; ++i) {
+                if (numbers[i].xindex == x && numbers[i].yindex == y)
+                    return numbers[i]
+            }
+        }
+
+    function pop(x, y){
+        for (var i = 0; i < numbers.length; ++i){
+            if (numbers[i].xindex == x && numbers[i].yindex == y){
+                numbers[i].destroy()
+                numbers.splice(i, 1)
+            }
+        }
+    }
+
+    function spawn() {
+        var component = Qt.createComponent("number.qml")
+
+        if (component.status == Component.Ready) {
+            var tile = tiles.getEmptyTile()
+
+            root.numbers.push(component.createObject(tiles, {"xindex": tile.xindex, "yindex": tile.yindex, "number": 2}))
+        }
+    }
+
+    function generate() {
+        var component = Qt.createComponent("number.qml")
+
+        if (component.status == Component.Ready) {
+            root.numbers.push(component.createObject(tiles, {"xindex": 2, "yindex": 0, "number": 2}));
+            //root.numbers.push(component.createObject(tiles, {"xindex": 1, "yindex": 1, "number": 4}));
+        }
+    }
+
+    Component.onCompleted: generate()
 }

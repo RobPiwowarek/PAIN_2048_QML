@@ -65,11 +65,9 @@ Rectangle {
         for (var i = xindex-1; i >= 0; --i){
             var tile = root.getTileAt(i, yindex)
 
-            console.log("I: " + i)
-
             if (tile){
                 if (tile.number == number){
-                    // todo: update score
+                    scoreBoard.score += number*2
 
                     number = number + number
 
@@ -79,8 +77,6 @@ Rectangle {
 
                     shouldSpawn = true
                 }
-                else
-                    return false
             }
             else {
                 move(i, yindex)

@@ -18,6 +18,19 @@ Rectangle {
         opacity: 0.66
         color: "white"
         radius: 4
+
+        property int score: 0
+
+        Text {
+            anchors.centerIn: parent
+            width: parent.width
+            height: parent.height
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            fontSizeMode: Text.Fit
+            font.pixelSize: parent.height
+            text: "Score: " + parent.score
+        }
     }
 
     Grid {
@@ -133,7 +146,7 @@ Rectangle {
 
         if (component.status == Component.Ready) {
             root.numbers.push(component.createObject(tiles, {"xindex": 2, "yindex": 0, "number": 2}));
-            //root.numbers.push(component.createObject(tiles, {"xindex": 1, "yindex": 1, "number": 4}));
+            root.numbers.push(component.createObject(tiles, {"xindex": 1, "yindex": 1, "number": 4}));
         }
     }
 

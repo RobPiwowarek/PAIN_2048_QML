@@ -87,6 +87,34 @@ Rectangle {
         return shouldSpawn
     }
 
+    function moveRight() {
+        var shouldSpawn = false
+
+        for (var i = xindex+1; i < root.columns; ++i){
+            var tile = root.getTileAt(i, yindex)
+
+            if (tile){
+                if (tile.number == number){
+                    scoreBoard.score += number*2
+
+                    number = number + number
+
+                    root.pop(i, yindex)
+
+                    move(i, yindex)
+
+                    shouldSpawn = true
+                }
+            }
+            else {
+                move(i, yindex)
+                shouldSpawn = true
+            }
+        }
+
+        return shouldSpawn
+    }
+
     function moveUp() {
         var shouldSpawn = false
 
@@ -121,12 +149,6 @@ Rectangle {
         for (var j = yindex+1; j < root.rows; ++j){
             var tile = root.getTileAt(xindex, j)
 
-            console.log("j: " + j)
-            console.log("yind: " + yindex)
-            console.log("xind: " + xindex)
-            if (tile)
-                console.log("Tile")
-
             if (tile){
                 if (tile.number == number){
                     scoreBoard.score += number*2
@@ -146,9 +168,6 @@ Rectangle {
             }
         }
 
-        console.log("past")
-        console.log("yind: " + yindex)
-        console.log("xind: " + xindex)
         return shouldSpawn
     }
 }

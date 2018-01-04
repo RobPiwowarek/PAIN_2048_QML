@@ -99,6 +99,25 @@ Rectangle {
         }
     }
 
+    function moveRight() {
+        var shouldSpawn = false
+
+        for (var i = 0; i < rows; ++i)
+            for (var j = rows-1; j >= 0; --j) {
+                var tile = root.getTileAt(j, i)
+
+                if (!tile)
+                    continue
+
+                if (tile.moveRight())
+                    shouldSpawn = true
+            }
+
+        if (shouldSpawn){
+            spawn()
+        }
+    }
+
     function moveUp() {
         var shouldSpawn = false
 
@@ -150,6 +169,10 @@ Rectangle {
 
         Keys.onDownPressed: {
             root.moveDown();
+        }
+
+        Keys.onRightPressed: {
+            root.moveRight();
         }
     }
 

@@ -4,6 +4,8 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.2
 import QtQuick.Window 2.0
 
+import "root.js" as Root
+
 Window {
     id: root
     width: 600; height: 600
@@ -27,35 +29,52 @@ Window {
 
         property int score: 0
 
-        Button {
-            id: newButton
-            text: "new"
-            anchors.left: parent.left
-            height: parent.height
+        RowLayout {
+            id: layout
+            anchors.fill: parent
+            spacing: 6
 
-            onClicked: root.newGame()
+            Button {
+                id: newButton
+                text: "new"
+
+                Layout.fillWidth: true
+                Layout.minimumWidth: 25
+                Layout.preferredWidth: 25
+                Layout.maximumWidth: scoreBoard.width/3
+                Layout.minimumHeight: scoreBoard.height
+
+                onClicked: Root.newGame()
+            }
+
+            Button {
+                text: "settings"
+
+                Layout.fillWidth: true
+                Layout.minimumWidth: 25
+                Layout.preferredWidth: 25
+                Layout.maximumWidth: scoreBoard.width/3
+                Layout.minimumHeight: scoreBoard.height
+            }
+
+            Text {
+                id: scoreBoardText
+
+                width: scoreBoard.width
+                height: scoreBoard.height
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                fontSizeMode: Text.Fit
+                font.pixelSize: parent.height
+                text: "Score: " + scoreBoard.score
+
+                Layout.fillWidth: true
+                Layout.minimumWidth: 25
+                Layout.preferredWidth: 25
+                Layout.maximumWidth: scoreBoard.width/3
+                Layout.minimumHeight: scoreBoard.height
+            }
         }
-
-        Button {
-            text: "settings"
-            height: parent.height
-            anchors.left: newButton.right
-            anchors.right: scoreBoardText.left
-        }
-
-        Text {
-            id: scoreBoardText
-            anchors.right: parent.right
-            anchors.centerIn: parent
-            width: parent.width
-            height: parent.height
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            fontSizeMode: Text.Fit
-            font.pixelSize: parent.height
-            text: "Score: " + scoreBoard.score
-        }
-
     }
 
     Grid {
@@ -92,7 +111,7 @@ Window {
 
                 for (var i = 0; i < root.columns; ++i) {
                     for (var j = 0; j < root.rows; ++j) {
-                        if (!root.getTileAt(j, i)) {
+                        if (!Root.getTileAt(j, i)) {
                             emptyTiles.push(itemAt(j + root.rows*i))
                         }
                     }
@@ -105,151 +124,25 @@ Window {
         }
     }
 
-    function moveLeft() {
-        var shouldSpawn = false
-
-        for (var i = 0; i < rows; ++i)
-            for (var j = 0; j < columns; ++j) {
-                var tile = root.getTileAt(j, i)
-
-                if (!tile)
-                    continue
-
-                if (tile.moveLeft())
-                    shouldSpawn = true
-            }
-
-        if (shouldSpawn){
-            spawn()
-        }
-    }
-
-    function moveRight() {
-        var shouldSpawn = false
-
-        for (var i = 0; i < rows; ++i)
-            for (var j = rows-1; j >= 0; --j) {
-                var tile = root.getTileAt(j, i)
-
-                if (!tile)
-                    continue
-
-                if (tile.moveRight())
-                    shouldSpawn = true
-            }
-
-        if (shouldSpawn){
-            spawn()
-        }
-    }
-
-    function moveUp() {
-        var shouldSpawn = false
-
-        for (var i = 0; i < rows; ++i)
-            for (var j = 0; j < columns; ++j) {
-                var tile = root.getTileAt(j, i)
-
-                if (!tile)
-                    continue
-
-                if (tile.moveUp())
-                    shouldSpawn = true
-            }
-
-        if (shouldSpawn){
-            spawn()
-        }
-    }
-
-    function moveDown() {
-        var shouldSpawn = false
-
-        for (var i = rows-1; i >= 0; --i)
-            for (var j = 0; j < columns; ++j) {
-                var tile = root.getTileAt(j, i)
-
-                if (!tile)
-                    continue
-
-                if (tile.moveDown())
-                    shouldSpawn = true
-            }
-
-        if (shouldSpawn){
-            spawn()
-        }
-    }
-
     Item {
         anchors.fill: parent
         focus: true
         Keys.onLeftPressed: {
-            root.moveLeft()
+            Root.moveLeft()
         }
 
         Keys.onUpPressed: {
-            root.moveUp()
+            Root.moveUp()
         }
 
         Keys.onDownPressed: {
-            root.moveDown();
+            Root.moveDown();
         }
 
         Keys.onRightPressed: {
-            root.moveRight();
+            Root.moveRight();
         }
     }
 
-    function getTileAt(x, y) {
-        for (var i = 0; i < numbers.length; ++i) {
-            if (numbers[i].xindex == x && numbers[i].yindex == y)
-                return numbers[i]
-        }
-    }
-
-    function pop(x, y){
-        for (var i = 0; i < numbers.length; ++i){
-            if (numbers[i].xindex == x && numbers[i].yindex == y){
-                numbers[i].destroy()
-                numbers.splice(i, 1)
-            }
-        }
-    }
-
-    function spawn() {
-        var component = Qt.createComponent("number.qml")
-
-        if (component.status == Component.Ready) {
-            var tile = tiles.getEmptyTile()
-
-            if (Math.random() * 2 > 1)
-                root.numbers.push(component.createObject(tiles, {"xindex": tile.xindex, "yindex": tile.yindex, "number": 4}))
-            else
-                root.numbers.push(component.createObject(tiles, {"xindex": tile.xindex, "yindex": tile.yindex, "number": 2}))
-        }
-    }
-
-    function generate() {
-        var component = Qt.createComponent("number.qml")
-
-        if (component.status == Component.Ready) {
-            root.numbers.push(component.createObject(tiles, {"xindex": 2, "yindex": 0, "number": 2}));
-            root.numbers.push(component.createObject(tiles, {"xindex": 1, "yindex": 1, "number": 4}));
-        }
-    }
-
-    function newGame(){
-        for (var i = 0; i < numbers.length; ++i){
-            numbers[i].destroy()
-        }
-
-        scoreBoard.score = 0
-
-        numbers = new Array()
-
-        generate()
-    }
-
-    Component.onCompleted: generate()
+    Component.onCompleted: Root.generate()
 }

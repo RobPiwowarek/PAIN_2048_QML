@@ -1,5 +1,7 @@
 import QtQuick 2.0
 
+import "root.js" as Root
+
 Rectangle {
     color: number <= 1 ? "transparent" :
                          number <= 2 ? "grey" :
@@ -63,7 +65,7 @@ Rectangle {
         var shouldSpawn = false
 
         for (var i = xindex-1; i >= 0; --i){
-            var tile = root.getTileAt(i, yindex)
+            var tile = Root.getTileAt(i, yindex)
 
             if (tile){
                 if (tile.number == number){
@@ -71,7 +73,7 @@ Rectangle {
 
                     number = number + number
 
-                    root.pop(i, yindex)
+                    Root.pop(i, yindex)
 
                     move(i, yindex)
 
@@ -91,7 +93,7 @@ Rectangle {
         var shouldSpawn = false
 
         for (var i = xindex+1; i < root.columns; ++i){
-            var tile = root.getTileAt(i, yindex)
+            var tile = Root.getTileAt(i, yindex)
 
             if (tile){
                 if (tile.number == number){
@@ -99,7 +101,7 @@ Rectangle {
 
                     number = number + number
 
-                    root.pop(i, yindex)
+                    Root.pop(i, yindex)
 
                     move(i, yindex)
 
@@ -119,7 +121,7 @@ Rectangle {
         var shouldSpawn = false
 
         for (var j = yindex-1; j >= 0; --j){
-            var tile = root.getTileAt(xindex, j)
+            var tile = Root.getTileAt(xindex, j)
 
             if (tile){
                 if (tile.number == number){
@@ -127,7 +129,7 @@ Rectangle {
 
                     number = number + number
 
-                    root.pop(xindex, j)
+                    Root.pop(xindex, j)
 
                     move(xindex, j)
 
@@ -147,7 +149,7 @@ Rectangle {
         var shouldSpawn = false
 
         for (var j = yindex+1; j < root.rows; ++j){
-            var tile = root.getTileAt(xindex, j)
+            var tile = Root.getTileAt(xindex, j)
 
             if (tile){
                 if (tile.number == number){
@@ -155,7 +157,7 @@ Rectangle {
 
                     number = number + number
 
-                    root.pop(xindex, j)
+                    Root.pop(xindex, j)
 
                     move(xindex, j)
 

@@ -1,5 +1,6 @@
 import QtQuick 2.6
 import QtGraphicalEffects 1.0
+import QtQuick.Controls 2.2
 
 Rectangle {
     id: root
@@ -20,16 +21,37 @@ Rectangle {
         radius: 4
 
         property int score: 0
-
-        Text {
-            anchors.centerIn: parent
+        Grid {
             width: parent.width
             height: parent.height
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            fontSizeMode: Text.Fit
-            font.pixelSize: parent.height
-            text: "Score: " + parent.score
+            columns: 3
+            rows: 1
+
+            anchors.top: parent.top
+
+            Button {
+                text: "new"
+
+                height: parent.height
+
+                onClicked: root.newGame()
+            }
+
+            Button {
+                text: "settings"
+                height: parent.height
+            }
+
+            Text {
+                id: scoreBoardText
+                width: parent.width
+                height: parent.height
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                fontSizeMode: Text.Fit
+                font.pixelSize: parent.height
+                text: "Score: " + scoreBoard.score
+            }
         }
     }
 
@@ -177,11 +199,11 @@ Rectangle {
     }
 
     function getTileAt(x, y) {
-            for (var i = 0; i < numbers.length; ++i) {
-                if (numbers[i].xindex == x && numbers[i].yindex == y)
-                    return numbers[i]
-            }
+        for (var i = 0; i < numbers.length; ++i) {
+            if (numbers[i].xindex == x && numbers[i].yindex == y)
+                return numbers[i]
         }
+    }
 
     function pop(x, y){
         for (var i = 0; i < numbers.length; ++i){
@@ -198,7 +220,10 @@ Rectangle {
         if (component.status == Component.Ready) {
             var tile = tiles.getEmptyTile()
 
-            root.numbers.push(component.createObject(tiles, {"xindex": tile.xindex, "yindex": tile.yindex, "number": 2}))
+            if (Math.random() * 2 > 1)
+                root.numbers.push(component.createObject(tiles, {"xindex": tile.xindex, "yindex": tile.yindex, "number": 4}))
+            else
+                root.numbers.push(component.createObject(tiles, {"xindex": tile.xindex, "yindex": tile.yindex, "number": 2}))
         }
     }
 
@@ -209,6 +234,18 @@ Rectangle {
             root.numbers.push(component.createObject(tiles, {"xindex": 2, "yindex": 0, "number": 2}));
             root.numbers.push(component.createObject(tiles, {"xindex": 1, "yindex": 1, "number": 4}));
         }
+    }
+
+    function newGame(){
+        for (var i = 0; i < numbers.length; ++i){
+            numbers[i].destroy()
+        }
+
+        scoreBoard.score = 0
+
+        numbers = new Array()
+
+        generate()
     }
 
     Component.onCompleted: generate()

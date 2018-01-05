@@ -10,6 +10,7 @@ Window {
     id: root
     width: 600; height: 600
     color: "#888888"
+    title: "2048"
 
     minimumWidth: gridLayout.Layout.minimumWidth
     minimumHeight: gridLayout.Layout.minimumHeight

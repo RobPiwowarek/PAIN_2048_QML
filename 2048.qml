@@ -11,117 +11,132 @@ Window {
     width: 600; height: 600
     color: "#888888"
 
-    minimumHeight: 200
-    minimumWidth: 200
+    minimumWidth: layout.Layout.minimumWidth
+    minimumHeight: layout.Layout.minimumHeight
 
     property int columns: 4
     property int rows: 4
     property variant numbers: []
 
-    Rectangle {
-        id: scoreBoard
-        width: parent.width; height: parent.height * 0.1
+    GridLayout {
+        id: gridLayout
+        anchors.fill: parent
+        rows: 2
 
-        anchors.top: parent.top
-        opacity: 0.66
-        color: "white"
-        radius: 4
+        Rectangle {
+            Layout.row: 0
+            Layout.fillWidth: true
+            Layout.minimumHeight: height
 
-        property int score: 0
+            id: scoreBoard
+            width: root.width; height: root.height * 0.1
 
-        RowLayout {
-            id: layout
-            anchors.fill: parent
-            spacing: 6
+            anchors.top: root.top
+            opacity: 0.66
+            color: "white"
+            radius: 4
 
-            Button {
-                id: newButton
-                text: "new"
+            property int score: 0
 
-                Layout.fillWidth: true
-                Layout.minimumWidth: 25
-                Layout.preferredWidth: 25
-                Layout.maximumWidth: scoreBoard.width/3
-                Layout.minimumHeight: scoreBoard.height
+            RowLayout {
+                id: layout
+                anchors.fill: parent
+                spacing: 6
 
-                onClicked: Root.newGame()
-            }
+                Button {
+                    id: newButton
+                    text: "new"
 
-            Button {
-                text: "settings"
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 25
+                    Layout.preferredWidth: 25
+                    Layout.maximumWidth: scoreBoard.width/3
+                    Layout.minimumHeight: scoreBoard.height/2
 
-                Layout.fillWidth: true
-                Layout.minimumWidth: 25
-                Layout.preferredWidth: 25
-                Layout.maximumWidth: scoreBoard.width/3
-                Layout.minimumHeight: scoreBoard.height
-            }
-
-            Text {
-                id: scoreBoardText
-
-                width: scoreBoard.width
-                height: scoreBoard.height
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                fontSizeMode: Text.Fit
-                font.pixelSize: parent.height
-                text: "Score: " + scoreBoard.score
-
-                Layout.fillWidth: true
-                Layout.minimumWidth: 25
-                Layout.preferredWidth: 25
-                Layout.maximumWidth: scoreBoard.width/3
-                Layout.minimumHeight: scoreBoard.height
-            }
-        }
-    }
-
-    Grid {
-        id: grid
-        width: parent.width
-        height: parent.height - scoreBoard.height
-
-        columns: root.columns
-        rows: root.rows
-
-        spacing: 4
-
-        property real tileWidth: (width - (columns - 1) * spacing) / columns
-        property real tileHeight: (height - (rows - 1) * spacing) / rows
-
-        anchors.bottom: parent.bottom
-
-        Repeater {
-            id: tiles
-            model: root.columns * root.rows
-
-            Rectangle {
-                width: parent.tileWidth
-                height: parent.tileHeight
-                color: "#AAAAAA"
-                radius: 2
-
-                property int xindex: index % root.columns
-                property int yindex: index / root.columns
-            }
-
-            function getEmptyTile(){
-                var emptyTiles = []
-
-                for (var i = 0; i < root.columns; ++i) {
-                    for (var j = 0; j < root.rows; ++j) {
-                        if (!Root.getTileAt(j, i)) {
-                            emptyTiles.push(itemAt(j + root.rows*i))
-                        }
-                    }
+                    onClicked: Root.newGame()
                 }
 
-                var index = Math.floor(Math.random() * emptyTiles.length)
+                Button {
+                    text: "settings"
 
-                return emptyTiles[index];
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 40
+                    Layout.preferredWidth: 40
+                    Layout.maximumWidth: scoreBoard.width/3
+                    Layout.minimumHeight: scoreBoard.height/2
+                }
+
+                Text {
+                    id: scoreBoardText
+
+                    width: scoreBoard.width
+                    height: scoreBoard.height
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    fontSizeMode: Text.Fit
+                    font.pixelSize: parent.height
+                    text: "Score: " + scoreBoard.score
+
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: 25
+                    Layout.preferredWidth: 25
+                    Layout.maximumWidth: scoreBoard.width/3
+                    Layout.minimumHeight: scoreBoard.height/2
+                }
             }
         }
+
+        Grid {
+            Layout.row: 1
+            Layout.fillWidth: true
+            Layout.minimumHeight: 100
+
+            id: grid
+            width: root.width
+            height: root.height - scoreBoard.height
+
+            columns: root.columns
+            rows: root.rows
+
+            spacing: 4
+
+            property real tileWidth: (width - (columns - 1) * spacing) / columns
+            property real tileHeight: (height - (rows - 1) * spacing) / rows
+
+            anchors.bottom: parent.bottom
+
+            Repeater {
+                id: tiles
+                model: root.columns * root.rows
+
+                Rectangle {
+                    width: parent.tileWidth
+                    height: parent.tileHeight
+                    color: "#AAAAAA"
+                    radius: 2
+
+                    property int xindex: index % root.columns
+                    property int yindex: index / root.columns
+                }
+
+                function getEmptyTile(){
+                    var emptyTiles = []
+
+                    for (var i = 0; i < root.columns; ++i) {
+                        for (var j = 0; j < root.rows; ++j) {
+                            if (!Root.getTileAt(j, i)) {
+                                emptyTiles.push(itemAt(j + root.rows*i))
+                            }
+                        }
+                    }
+
+                    var index = Math.floor(Math.random() * emptyTiles.length)
+
+                    return emptyTiles[index];
+                }
+            }
+        }
+
     }
 
     Item {

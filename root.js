@@ -123,3 +123,7 @@ function moveDown() {
         spawn()
     }
 }
+
+function victory() {
+
+}

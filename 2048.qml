@@ -11,8 +11,8 @@ Window {
     width: 600; height: 600
     color: "#888888"
 
-    minimumWidth: layout.Layout.minimumWidth
-    minimumHeight: layout.Layout.minimumHeight
+    minimumWidth: gridLayout.Layout.minimumWidth
+    minimumHeight: gridLayout.Layout.minimumHeight
 
     property int columns: 4
     property int rows: 4
@@ -26,7 +26,8 @@ Window {
         Rectangle {
             Layout.row: 0
             Layout.fillWidth: true
-            Layout.minimumHeight: height
+            Layout.minimumHeight: 600*0.1
+            Layout.minimumWidth: 200
 
             id: scoreBoard
             width: root.width; height: root.height * 0.1
@@ -89,11 +90,13 @@ Window {
         Grid {
             Layout.row: 1
             Layout.fillWidth: true
-            Layout.minimumHeight: 100
+            Layout.fillHeight: true
+            Layout.minimumHeight: 200
+            Layout.minimumWidth: 200
 
             id: grid
-            width: root.width
-            height: root.height - scoreBoard.height
+            //width: root.width
+            //height: root.height - scoreBoard.height
 
             columns: root.columns
             rows: root.rows
@@ -102,8 +105,6 @@ Window {
 
             property real tileWidth: (width - (columns - 1) * spacing) / columns
             property real tileHeight: (height - (rows - 1) * spacing) / rows
-
-            anchors.bottom: parent.bottom
 
             Repeater {
                 id: tiles

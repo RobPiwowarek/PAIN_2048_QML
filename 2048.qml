@@ -1,11 +1,16 @@
 import QtQuick 2.6
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 2.2
+import QtQuick.Controls 1.4
+import QtQuick.Layouts 1.2
+import QtQuick.Window 2.0
 
-Rectangle {
+Window {
     id: root
     width: 600; height: 600
     color: "#888888"
+
+    minimumHeight: 200
+    minimumWidth: 200
 
     property int columns: 4
     property int rows: 4
@@ -21,38 +26,36 @@ Rectangle {
         radius: 4
 
         property int score: 0
-        Grid {
+
+        Button {
+            id: newButton
+            text: "new"
+            anchors.left: parent.left
+            height: parent.height
+
+            onClicked: root.newGame()
+        }
+
+        Button {
+            text: "settings"
+            height: parent.height
+            anchors.left: newButton.right
+            anchors.right: scoreBoardText.left
+        }
+
+        Text {
+            id: scoreBoardText
+            anchors.right: parent.right
+            anchors.centerIn: parent
             width: parent.width
             height: parent.height
-            columns: 3
-            rows: 1
-
-            anchors.top: parent.top
-
-            Button {
-                text: "new"
-
-                height: parent.height
-
-                onClicked: root.newGame()
-            }
-
-            Button {
-                text: "settings"
-                height: parent.height
-            }
-
-            Text {
-                id: scoreBoardText
-                width: parent.width
-                height: parent.height
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                fontSizeMode: Text.Fit
-                font.pixelSize: parent.height
-                text: "Score: " + scoreBoard.score
-            }
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            fontSizeMode: Text.Fit
+            font.pixelSize: parent.height
+            text: "Score: " + scoreBoard.score
         }
+
     }
 
     Grid {

@@ -79,7 +79,7 @@ Window {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     fontSizeMode: Text.Fit
-                    font.pixelSize: parent.height
+                    font.pixelSize: parent.height/2
                     text: "Score: " + scoreBoard.score
 
                     Layout.fillWidth: true

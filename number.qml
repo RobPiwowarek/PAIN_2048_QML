@@ -20,6 +20,10 @@ Rectangle {
     property int yindex
     property int number: 2
 
+    property int xlogical
+    property int ylogical
+    property int numberlogical
+
     x: tiles.itemAt(xindex + root.rows*yindex).x
     y: tiles.itemAt(xindex + root.rows*yindex).y
     width: tiles.itemAt(xindex + root.rows*yindex).width
@@ -59,29 +63,36 @@ Rectangle {
     function move(x, y) {
         xindex = x
         yindex = y
+        xlogical = x
+        ylogical = y
     }
 
     function moveLeft() {
         var shouldSpawn = false
 
-        for (var i = xindex-1; i >= 0; --i){
-            var tile = Root.getTileAt(i, yindex)
+        for (var i = xlogical-1; i >= 0; --i){
+            var tile = Root.getTileAt(i, ylogical)
 
             if (tile){
-                if (tile.number == number){
+                if (tile.numberlogical == numberlogical){
                     scoreBoard.score += number*2
 
                     number = number + number
+                    numberlogical = numberlogical * 2
 
-                    Root.pop(i, yindex)
+                    Root.pop(i, ylogical)
 
-                    move(i, yindex)
+                    move(i, ylogical)
 
                     shouldSpawn = true
+                    return shouldSpawn
+                }
+                else {
+                    return shouldSpawn
                 }
             }
             else {
-                move(i, yindex)
+                move(i, ylogical)
                 shouldSpawn = true
             }
         }
@@ -92,24 +103,29 @@ Rectangle {
     function moveRight() {
         var shouldSpawn = false
 
-        for (var i = xindex+1; i < root.columns; ++i){
-            var tile = Root.getTileAt(i, yindex)
+        for (var i = xlogical+1; i < root.columns; ++i){
+            var tile = Root.getTileAt(i, ylogical)
 
             if (tile){
-                if (tile.number == number){
+                if (tile.numberlogical == numberlogical){
                     scoreBoard.score += number*2
 
                     number = number + number
+                    numberlogical = numberlogical*2
 
-                    Root.pop(i, yindex)
+                    Root.pop(i, ylogical)
 
-                    move(i, yindex)
+                    move(i, ylogical)
 
                     shouldSpawn = true
+                    return shouldSpawn
+                }
+                else {
+                    return shouldSpawn
                 }
             }
             else {
-                move(i, yindex)
+                move(i, ylogical)
                 shouldSpawn = true
             }
         }
@@ -120,24 +136,29 @@ Rectangle {
     function moveUp() {
         var shouldSpawn = false
 
-        for (var j = yindex-1; j >= 0; --j){
-            var tile = Root.getTileAt(xindex, j)
+        for (var j = ylogical-1; j >= 0; --j){
+            var tile = Root.getTileAt(xlogical, j)
 
             if (tile){
-                if (tile.number == number){
+                if (tile.numberlogical == numberlogical){
                     scoreBoard.score += number*2
 
                     number = number + number
+                    numberlogical = numberlogical*2
 
-                    Root.pop(xindex, j)
+                    Root.pop(xlogical, j)
 
-                    move(xindex, j)
+                    move(xlogical, j)
 
                     shouldSpawn = true
+                    return shouldSpawn
+                }
+                else {
+                    return shouldSpawn
                 }
             }
             else {
-                move(xindex, j)
+                move(xlogical, j)
                 shouldSpawn = true
             }
         }
@@ -148,24 +169,30 @@ Rectangle {
     function moveDown() {
         var shouldSpawn = false
 
-        for (var j = yindex+1; j < root.rows; ++j){
-            var tile = Root.getTileAt(xindex, j)
+        for (var j = ylogical+1; j < root.rows; ++j){
+            var tile = Root.getTileAt(xlogical, j)
 
             if (tile){
-                if (tile.number == number){
+                if (tile.numberlogical == numberlogical){
                     scoreBoard.score += number*2
 
                     number = number + number
 
-                    Root.pop(xindex, j)
+                    numberlogical = numberlogical*2
 
-                    move(xindex, j)
+                    Root.pop(xlogical, j)
+
+                    move(xlogical, j)
 
                     shouldSpawn = true
+                    return shouldSpawn
+                }
+                else {
+                    return shouldSpawn
                 }
             }
             else {
-                move(xindex, j)
+                move(xlogical, j)
                 shouldSpawn = true
             }
         }

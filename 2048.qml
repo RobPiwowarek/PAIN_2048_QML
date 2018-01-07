@@ -3,6 +3,7 @@ import QtGraphicalEffects 1.0
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.2
 import QtQuick.Window 2.0
+import QtQuick.Dialogs 1.2
 
 import "root.js" as Root
 
@@ -66,6 +67,8 @@ Window {
                     Layout.preferredWidth: 40
                     Layout.maximumWidth: scoreBoard.width/3
                     Layout.minimumHeight: scoreBoard.height/2
+
+                    onClicked: dialog.open()
                 }
 
                 Text {
@@ -158,6 +161,46 @@ Window {
 
         Keys.onRightPressed: {
             Root.moveRight();
+        }
+    }
+
+    Dialog {
+        id: dialog
+        modality: Qt.WindowModal
+        title: "Settings"
+
+        onButtonClicked: {
+            if (clickedButton === StandardButton.Ok && answer.value >= 3){
+                root.columns = answer.value;
+                root.rows = answer.value;
+                Root.newGame()
+            }
+            else{
+                root.columns = 4
+                root.rows = 4
+            }
+
+        }
+
+        ColumnLayout {
+            id: column
+            width: parent.width
+
+            Label {
+                text: "Board Size (Min 3)"
+                Layout.columnSpan: 2
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+            }
+
+            RowLayout {
+                Layout.alignment: Qt.AlignHCenter
+                SpinBox {
+                    id: answer
+                    onEditingFinished: dialog.click(StandardButton.Ok)
+                }
+
+            }
         }
     }
 

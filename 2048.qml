@@ -170,7 +170,7 @@ Window {
         title: "Settings"
 
         onButtonClicked: {
-            if (clickedButton === StandardButton.Ok && answer.value >= 3){
+            if (clickedButton === StandardButton.Ok && answer.value >= 3 && answer.value <= 10){
                 root.columns = answer.value;
                 root.rows = answer.value;
                 Root.newGame()
@@ -187,7 +187,7 @@ Window {
             width: parent.width
 
             Label {
-                text: "Board Size (Min 3)"
+                text: "Board Size (<3, 10>)"
                 Layout.columnSpan: 2
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap

@@ -1,3 +1,5 @@
+var isMoving = false
+
 function getTileAt(x, y) {
     for (var i = 0; i < numbers.length; ++i) {
         if (numbers[i].xindex == x && numbers[i].yindex == y)
@@ -50,7 +52,9 @@ function newGame(){
 
 function moveLeft() {
     var shouldSpawn = false
+    isMoving = true
 
+    timer.start()
     for (var i = 0; i < rows; ++i)
         for (var j = 0; j < columns; ++j) {
             var tile = getTileAt(j, i)
@@ -69,6 +73,8 @@ function moveLeft() {
 
 function moveRight() {
     var shouldSpawn = false
+    isMoving = true
+    timer.start()
 
     for (var i = 0; i < rows; ++i)
         for (var j = rows-1; j >= 0; --j) {
@@ -88,6 +94,8 @@ function moveRight() {
 
 function moveUp() {
     var shouldSpawn = false
+    isMoving = true
+    timer.start()
 
     for (var i = 0; i < rows; ++i)
         for (var j = 0; j < columns; ++j) {
@@ -107,6 +115,8 @@ function moveUp() {
 
 function moveDown() {
     var shouldSpawn = false
+    isMoving = true
+    timer.start()
 
     for (var i = rows-1; i >= 0; --i)
         for (var j = 0; j < columns; ++j) {
@@ -122,6 +132,10 @@ function moveDown() {
     if (shouldSpawn){
         spawn()
     }
+}
+
+function stoppedMoving() {
+    isMoving = false
 }
 
 function victory() {

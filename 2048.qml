@@ -148,19 +148,23 @@ Window {
         anchors.fill: parent
         focus: true
         Keys.onLeftPressed: {
-            Root.moveLeft()
+            if (!Root.isMoving)
+                Root.moveLeft()
         }
 
         Keys.onUpPressed: {
-            Root.moveUp()
+            if (!Root.isMoving)
+                Root.moveUp()
         }
 
         Keys.onDownPressed: {
-            Root.moveDown();
+            if (!Root.isMoving)
+                 Root.moveDown();
         }
 
         Keys.onRightPressed: {
-            Root.moveRight();
+            if (!Root.isMoving)
+                Root.moveRight();
         }
     }
 
@@ -202,6 +206,13 @@ Window {
 
             }
         }
+    }
+
+    Timer {
+        id: timer
+        interval: 50
+        repeat: false
+        onTriggered: Root.stoppedMoving()
     }
 
     Component.onCompleted: Root.generate()

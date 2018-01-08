@@ -143,8 +143,9 @@ Rectangle {
                 if (tile.numberlogical == numberlogical){
                     scoreBoard.score += number*2
 
-                    number = number + number
                     numberlogical = numberlogical*2
+
+                    number = numberlogical
 
                     Root.pop(xlogical, j)
 

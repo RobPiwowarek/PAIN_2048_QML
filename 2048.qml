@@ -148,23 +148,40 @@ Window {
         anchors.fill: parent
         focus: true
         Keys.onLeftPressed: {
-            if (!Root.isMoving)
+            if (!Root.isMoving){
                 Root.moveLeft()
+                if (Root.isGameOver()){
+                    gameoverdialog.open()
+                }
+            }
+
         }
 
         Keys.onUpPressed: {
-            if (!Root.isMoving)
+            if (!Root.isMoving){
                 Root.moveUp()
+                if (Root.isGameOver()){
+                    gameoverdialog.open()
+                }
+            }
         }
 
         Keys.onDownPressed: {
-            if (!Root.isMoving)
+            if (!Root.isMoving){
                  Root.moveDown();
+                if (Root.isGameOver()){
+                    gameoverdialog.open()
+                }
+            }
         }
 
         Keys.onRightPressed: {
-            if (!Root.isMoving)
+            if (!Root.isMoving){
                 Root.moveRight();
+                if (Root.isGameOver()){
+                    gameoverdialog.open()
+                }
+            }
         }
     }
 
@@ -204,6 +221,28 @@ Window {
                     onEditingFinished: dialog.click(StandardButton.Ok)
                 }
 
+            }
+        }
+    }
+
+    Dialog {
+        id: gameoverdialog
+        modality: Qt.WindowModal
+        title: "Game Over"
+
+        onButtonClicked: {
+            if (clickedButton === StandardButton.Ok)
+                Root.newGame()
+        }
+
+        ColumnLayout {
+            width: parent.width
+
+            Label {
+                text: "Game Over"
+                Layout.columnSpan: 1
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
             }
         }
     }

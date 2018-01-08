@@ -138,6 +138,20 @@ function stoppedMoving() {
     isMoving = false
 }
 
-function victory() {
+function isGameOver() {
+    for (var i = 0; i < root.rows; ++i)
+        for (var j = 0; j < root.columns; ++j){
+            if (!getTileAt(j, i))
+                return false
+            if (getTileAt(j+1, i) && getTileAt(j+1, i).numberlogical == getTileAt(j, i).numberlogical)
+                return false
+            if (getTileAt(j-1, i) && getTileAt(j-1, i).numberlogical == getTileAt(j, i).numberlogical)
+                return false
+            if (getTileAt(j, i+1) && getTileAt(j, i+1).numberlogical == getTileAt(j, i).numberlogical)
+                return false
+            if (getTileAt(j, i-1) && getTileAt(j, i-1).numberlogical == getTileAt(j, i).numberlogical)
+                return false
+        }
 
+    return true
 }
